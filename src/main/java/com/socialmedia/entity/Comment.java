@@ -1,0 +1,32 @@
+package com.socialmedia.entity;
+
+
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Data
+@Table(name="comments")
+@NoArgsConstructor
+public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="post_id",nullable = false)
+    private User user;
+
+    @Column(columnDefinition = "NEXT",nullable = false)
+    private String content;
+
+    @CreationTimestamp
+    @Column(name="created_at",updatable = false)
+    private LocalDateTime createdAt;
+
+}
