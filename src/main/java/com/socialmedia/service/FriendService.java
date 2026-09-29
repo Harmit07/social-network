@@ -96,4 +96,43 @@ public class FriendService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    public String rejectRequest(Long connectionId, String receiverEmail) {
+        FriendConnection connection = connectionRepository.findById(connectionId)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        if (!connection.getReceiver().getEmail().equals(receiverEmail)) {
+            throw new RuntimeException("Unauthorized to reject this request");
+        }
+
+        connectionRepository.delete(connection);
+        return "Friend request rejected";
+    }
+
+    public String removeFriend(Long connectionId, String userEmail) {
+        FriendConnection connection = connectionRepository.findById(connectionId)
+                .orElseThrow(() -> new RuntimeException("Connection not found"));
+
+        if (!connection.getReceiver().getEmail().equals(userEmail) && !connection.getRequester().getEmail().equals(userEmail)) {
+            throw new RuntimeException("Unauthorized to remove this friend");
+        }
+
+        connectionRepository.delete(connection);
+        return "Friend removed successfully";
+    }
+
+    public List<com.socialmedia.dto.UserProfileDto> getFriends(String userEmail) {
+        User currentUser = userRepository.findByEmail(userEmail).orElseThrow();
+        List<FriendConnection> connections = connectionRepository.findAcceptedConnections(currentUser);
+
+        return connections.stream().map(conn -> {
+            User friend = conn.getRequester().getId().equals(currentUser.getId()) ? conn.getReceiver() : conn.getRequester();
+            com.socialmedia.dto.UserProfileDto dto = new com.socialmedia.dto.UserProfileDto();
+            dto.setUsername(friend.getUsername());
+            dto.setEmail(friend.getEmail());
+            dto.setBio(friend.getBio());
+            dto.setProfilePictureUrl(friend.getProfilePictureUrl());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }
