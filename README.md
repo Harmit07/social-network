@@ -1,67 +1,79 @@
-# Social Network Backend API
+# Social Network
 
-A fully-featured RESTful API backend for a social networking platform, built with Spring Boot and Java 21. It provides features like user authentication via JWT, user profiles, a friend management system, a dynamic post feed, post interactions (likes & comments), and real-time chat via WebSockets.
+A full-stack social networking platform featuring user profiles, a dynamic post feed, post interactions (likes & comments), friend management, and real-time chat. 
+
+This repository contains both the **Spring Boot Backend** and the **Frontend UI**.
 
 ## 🚀 Technologies Used
-* **Framework:** Spring Boot (WebMVC, Data JPA, Security, WebSockets)
-* **Language:** Java 21
-* **Database:** PostgreSQL
-* **ORM:** Spring Data JPA / Hibernate
-* **Security:** Spring Security & JWT (JSON Web Tokens)
-* **Real-time:** WebSockets (STOMP)
-* **Utilities:** Lombok, Maven
+* **Backend:** Spring Boot (Java 21), PostgreSQL, Spring Security & JWT, WebSockets (STOMP)
+* **Frontend:** Vite, Tailwind CSS (located in `src/main/Frontend/social-network-ui`)
+* **Utilities:** Lombok, Maven, Node.js, npm
 
 ## 🛠 Prerequisites
 Before running the application, ensure you have the following installed:
 1. **Java 21** or higher.
-2. **PostgreSQL** running locally on port `5433`.
-3. A created database named `social_network_db`.
+2. **Node.js** and npm.
+3. **PostgreSQL** running locally on port `5433`.
+4. A created database named `social_network_db`.
 
-**Database Configuration** (defined in `application.properties`):
+**Database Configuration** (defined in `src/main/resources/application.properties`):
 * URL: `jdbc:postgresql://localhost:5433/social_network_db`
 * Username: `postgres`
 * Password: `0000`
 
-*(If your PostgreSQL runs on the default port `5432` or uses a different password, make sure to update `src/main/resources/application.properties`!)*
-
 ## 🏃‍♂️ How to Run
-1. Clone the repository.
-2. Open a terminal in the project root folder.
-3. Run the following Maven command to start the application:
+
+You will need to run the backend and frontend simultaneously in two separate terminals.
+
+### 1. Run the Backend (Spring Boot)
+1. Open a terminal in the project root folder.
+2. Run the following Maven command:
    ```bash
    ./mvnw spring-boot:run
    ```
-4. The backend server will start on `http://localhost:8080`.
+3. The backend server will start on `http://localhost:8080`.
 
-## 📚 API Endpoints Overview
+### 2. Run the Frontend (Vite)
+1. Open a new terminal and navigate to the frontend folder:
+   ```bash
+   cd src/main/Frontend/social-network-ui
+   ```
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. The frontend will start on `http://localhost:5173`.
 
-All endpoints (except `/api/users/register` and `/api/users/login`) require an `Authorization` header with the JWT token: 
-`Authorization: Bearer <your_jwt_token>`
+## 📚 Backend API Endpoints Overview
 
-### Authentication
+*All endpoints (except `/api/users/register` and `/api/users/login`) require an `Authorization` header with the JWT token: `Authorization: Bearer <your_jwt_token>`*
+
+### Authentication & Profiles
 * `POST /api/users/register` - Register a new user.
 * `POST /api/users/login` - Authenticate and receive a JWT token.
-
-### User Profiles
-* `GET /api/users/profile` - Get the logged-in user's profile details.
-* `PUT /api/users/profile` - Update bio and profile picture URL.
-* `GET /api/users/{username}` - View another user's profile.
+* `GET /api/users/profile` - Get logged-in user profile.
+* `PUT /api/users/profile` - Update bio and picture.
+* `GET /api/users/{username}` - View user profile.
 
 ### Posts & Interactions
-* `POST /api/posts` - Create a new post.
-* `GET /api/posts` - Get the chronological feed (posts from the user and their accepted friends).
+* `POST /api/posts` - Create post.
+* `GET /api/posts` - Get the chronological feed.
 * `POST /api/posts/{postId}/like` - Like a post.
 * `DELETE /api/posts/{postId}/like` - Unlike a post.
-* `POST /api/posts/{postId}/comments` - Add a comment to a post.
-* `GET /api/posts/{postId}/comments` - Get all comments for a post.
+* `POST /api/posts/{postId}/comments` - Add a comment.
+* `GET /api/posts/{postId}/comments` - Get comments.
 
 ### Friend Management
-* `POST /api/friends/request` - Send a friend request.
-* `GET /api/friends/pending` - View incoming pending friend requests.
-* `PUT /api/friends/accept/{connectionId}` - Accept a friend request.
-* `DELETE /api/friends/reject/{connectionId}` - Reject a friend request.
+* `POST /api/friends/request` - Send friend request.
+* `GET /api/friends/pending` - View incoming requests.
+* `PUT /api/friends/accept/{connectionId}` - Accept request.
+* `DELETE /api/friends/reject/{connectionId}` - Reject request.
 * `GET /api/friends` - List all accepted friends.
-* `DELETE /api/friends/remove/{connectionId}` - Remove a user from your friends list.
+* `DELETE /api/friends/remove/{connectionId}` - Remove friend.
 
 ### Real-time Chat
-* Uses WebSockets over STOMP. Connect to the WebSocket endpoint defined in `WebSocketConfig.java` and subscribe to `/topic/public` for global chat broadcasts.
+* Uses WebSockets over STOMP on the backend configuration.
