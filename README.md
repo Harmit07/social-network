@@ -6,7 +6,7 @@ This repository contains both the **Spring Boot Backend** and the **Frontend UI*
 
 ## 🚀 Technologies Used
 * **Backend:** Spring Boot (Java 21), PostgreSQL, Spring Security & JWT, WebSockets (STOMP)
-* **Frontend:** Vite, Tailwind CSS (located in `src/main/Frontend/social-network-ui`)
+* **Frontend:** Vite, Tailwind CSS (located in `frontend`)
 * **Utilities:** Lombok, Maven, Node.js, npm
 
 ## 🛠 Prerequisites
@@ -16,7 +16,7 @@ Before running the application, ensure you have the following installed:
 3. **PostgreSQL** running locally on port `5433`.
 4. A created database named `social_network_db`.
 
-**Database Configuration** (defined in `src/main/resources/application.properties`):
+**Database Configuration** (defined in `backend/src/main/resources/application.properties`):
 * URL: `jdbc:postgresql://localhost:5433/social_network_db`
 * Username: `postgres`
 * Password: `0000`
@@ -27,16 +27,20 @@ You will need to run the backend and frontend simultaneously in two separate ter
 
 ### 1. Run the Backend (Spring Boot)
 1. Open a terminal in the project root folder.
-2. Run the following Maven command:
+2. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+3. Run the following Maven command:
    ```bash
    ./mvnw spring-boot:run
    ```
-3. The backend server will start on `http://localhost:8080`.
+4. The backend server will start on `http://localhost:8080`.
 
 ### 2. Run the Frontend (Vite)
 1. Open a new terminal and navigate to the frontend folder:
    ```bash
-   cd src/main/Frontend/social-network-ui
+   cd frontend
    ```
 2. Install the dependencies:
    ```bash
